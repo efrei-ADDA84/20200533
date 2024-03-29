@@ -21,3 +21,8 @@ Ce dépôt contient un wrapper météo qui utilise l'API OpenWeatherMap pour ré
 3. **Packager le code dans une image Docker** :
 J'ai créé un Dockerfile qui décrit l'environnement nécessaire pour exécuter mon application. J'ai utilisé l'image Python officielle comme base, copié mon code source dans le conteneur, installé les dépendances nécessaires avec pip, puis défini la commande par défaut pour exécuter mon application.
 
+J'ai ensuite utilisé la commande 
+```
+docker build -t weatherapp .
+```
+pour construire l'image Docker à partir du Dockerfile.
