@@ -9,6 +9,23 @@ Ce dépôt contient un wrapper météo qui utilise l'API OpenWeatherMap pour ré
 3. Packager son code dans une image Docker
 4. Mettre à disposition son image sur DockerHub
 
+## Utilisation
+
+1. **Téléchargez l'image Docker** :
+Utilisez la commande suivante pour télécharger l'image Docker depuis Docker Hub :
+```
+docker pull mansat269/weatherapp
+```
+
+2. **Exécutez le conteneur Docker** :
+Une fois l'image téléchargée, vous pouvez exécuter le conteneur Docker en fournissant les variables d'environnement nécessaires :
+```
+docker run --env LAT="5.902785" --env LONG="102.754175" --env API_KEY= YOUR_API_KEY mansat269/weatherapp
+```
+
+Assurez-vous de remplacer `YOUR_API_KEY` par votre clé API OpenWeather
+
+
 ## Étapes réalisées
 
 1. **Choix du langage de programmation** :
