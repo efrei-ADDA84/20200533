@@ -26,3 +26,21 @@ J'ai ensuite utilisé la commande
 docker build -t weatherapp .
 ```
 pour construire l'image Docker à partir du Dockerfile.
+
+4. **Mise à Disposition sur DockerHub** : 
+Pour rendre l'image disponible sur DockerHub je me suis d'abord connecté à compte DockerHub en utilisant : 
+
+```
+docker login
+```
+
+Il a ensuite fallu taguer mon image avec mon nom d'utilisateur DockerHub et le nom à donner a l'image:
+```
+docker tag myapp mansat269/weatherapp
+```
+
+Enfin, j'ai utilisé la commande suivante pour posser l'image sur DockerHub et la rendre publique
+
+```
+docker push mansat269/weatherap
+```
