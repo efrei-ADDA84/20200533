@@ -40,7 +40,7 @@ J'ai créé un Dockerfile qui décrit l'environnement nécessaire pour exécuter
 
 J'ai ensuite utilisé la commande 
 ```
-docker build -t weatherapp .
+docker build -t myapp .
 ```
 pour construire l'image Docker à partir du Dockerfile.
 
@@ -59,5 +59,5 @@ docker tag myapp mansat269/weatherapp
 Enfin, j'ai utilisé la commande suivante pour posser l'image sur DockerHub et la rendre publique
 
 ```
-docker push mansat269/weatherap
+docker push mansat269/weatherapp
 ```
