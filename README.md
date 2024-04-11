@@ -38,6 +38,10 @@ Assurez-vous de remplacer `YOUR_API_KEY` par votre clé API OpenWeather
 3. **Packager le code dans une image Docker** :
 J'ai créé un Dockerfile qui décrit l'environnement nécessaire pour exécuter mon application. J'ai utilisé l'image Python officielle comme base, copié mon code source dans le conteneur, installé les dépendances nécessaires avec pip, puis défini la commande par défaut pour exécuter mon application.
 
+J'ai opté pour Alpine Linux comme base pour cette image Docker car elle me permet de bénéficier d'une taille réduite d'une sécurité accrue pour minimiser les vulnérabilités détectées Trivy.
+
+L'utilisation de la commande `pip install --no-cache-dir requests==2.3` permet d'éviter les erreurs de linting. En spécifiant `--no-cache-dir`, je désactive la mise en cache des fichiers téléchargés, ce qui garantit que je n'utilise que la version spécifique de la bibliothèque Requests (2.3) et évite les erreurs potentielles causées par des versions plus récentes ou incompatibles
+
 J'ai ensuite utilisé la commande 
 ```
 docker build -t myapp .
