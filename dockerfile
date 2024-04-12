@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/ ./
+COPY  . .
 
 ENV OPENWEATHER_API_KEY=""
 ENV FLASK_APP=weather.py
