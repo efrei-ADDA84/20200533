@@ -23,7 +23,12 @@ def get_weather():
         return jsonify({'error': 'Failed to fetch weather data.'}), 500
 
     data = response.json()
-    return jsonify(data)
+    return jsonify({
+            "city": data['name'],  
+            "country": data['sys']['country'],  
+            "weather_description": data['weather'][0]['description'],
+            "temperature": data['main']['temp']
+        })
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8081)  # Exécution de l'application sur le port 8081
