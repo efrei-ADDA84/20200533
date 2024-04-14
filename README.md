@@ -96,7 +96,7 @@ Pour utiliser cette API météo, suivez les étapes suivantes :
 4. Lancez l'API en utilisant Docker :
 
     ```bash
-    docker run -d --name weather-api -p 8081:8081 -e OPENWEATHER_API_KEY=$OPENWEATHER_API_KEY mansat269/weatherapp:latest
+    docker run -p 8081:8081 -e OPENWEATHER_API_KEY=$OPENWEATHER_API_KEY mansat269/weatherapp:latest
     ```
 
 5. Accédez à l'API à l'aide de votre navigateur Web ou d'un outil comme cURL :
