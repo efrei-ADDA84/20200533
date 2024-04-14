@@ -110,6 +110,8 @@ Pour utiliser cette API météo, suivez les étapes suivantes :
 1. **Configuration du Workflow GitHub Actions :** Un workflow GitHub Actions a été configuré pour automatiser la construction de l'image Docker à chaque nouveau commit sur la branche principale. L'image est ensuite poussée vers Docker Hub.
     
 2. **Transformation du Wrapper en API :** Le wrapper météo a été transformé en une API utilisant Flask. Cette API accepte les paramètres de latitude et de longitude et renvoie les données météorologiques correspondantes à partir de l'API OpenWeatherMap.
+
+J'ai choisi d'utiliser Flask pour développer l'API météo principalement parce que mon wrapper initial était déjà écrit en Python. Flask est un micro-framework web en Python qui offre une syntaxe simple et intuitive, ce qui rend la transition du wrapper vers une API plus fluide et efficace.
     
 3. **Publication automatique sur Docker Hub :** L'image Docker de l'API est automatiquement publiée sur Docker Hub à chaque nouveau commit sur la branche principale, grâce au workflow GitHub Actions.
     
