@@ -66,3 +66,128 @@ Enfin, j'ai utilisé la commande suivante pour posser l'image sur DockerHub et l
 docker push mansat269/weatherapp
 ```
 
+# Weather API
+
+Ce TP vise à créer une API météo qui récupère les données météorologiques d'un lieu donné à partir de la latitude et de la longitude fournies.
+
+## Objectifs
+
+- Créer une API météo
+- Configurer un workflow GitHub Actions pour automatiser la construction de l'image Docker et son déploiement sur Docker Hub.
+- Publier l'image Docker sur Docker Hub.
+- Exposer l'API météo à l'aide de Docker.
+
+## Utilisation
+
+Pour utiliser cette API météo, suivez les étapes suivantes :
+
+2. Accédez au répertoire du projet :
+
+    ```bash
+    cd weather-api
+    ```
+
+3. Définissez votre clé API OpenWeatherMap en tant que variable d'environnement :
+
+    ```bash
+    export OPENWEATHER_API_KEY=votre_clé_api
+    ```
+
+4. Lancez l'API en utilisant Docker :
+
+    ```bash
+    docker run -d --name weather-api -p 8081:8081 -e OPENWEATHER_API_KEY=$OPENWEATHER_API_KEY mansat269/weatherapp:latest
+    ```
+
+5. Accédez à l'API à l'aide de votre navigateur Web ou d'un outil comme cURL :
+
+    ```bash
+    curl "http://localhost:8081/?lat=3.140853&lon=101.693207"
+    ```
+
+## Étapes réalisées
+
+1. **Configuration du Workflow GitHub Actions :** Un workflow GitHub Actions a été configuré pour automatiser la construction de l'image Docker à chaque nouveau commit sur la branche principale. L'image est ensuite poussée vers Docker Hub.
+    
+2. **Transformation du Wrapper en API :** Le wrapper météo a été transformé en une API utilisant Flask. Cette API accepte les paramètres de latitude et de longitude et renvoie les données météorologiques correspondantes à partir de l'API OpenWeatherMap.
+    
+3. **Publication automatique sur Docker Hub :** L'image Docker de l'API est automatiquement publiée sur Docker Hub à chaque nouveau commit sur la branche principale, grâce au workflow GitHub Actions.
+    
+4. **Exposition de l'API :** L'API météo est exposée en utilisant Docker. Les utilisateurs peuvent accéder à l'API en exécutant un conteneur Docker local et en envoyant des requêtes HTTP aux endpoints appropriés.
+
+## Explication du Workflow GitHub Actions
+
+### Définition des conditions de déclenchement du workflow
+
+Le workflow est déclenché à chaque fois qu'un push est effectué sur la branche principale (main). Cela signifie que chaque fois qu'un commit est effectué sur la branche main, le workflow sera déclenché pour construire et pousser l'image Docker.
+
+```yaml
+on:
+  push:
+    branches:
+      - main
+```
+
+### Tâches à exécuter
+
+Le workflow consiste en une seule tâche (build-and-push), qui est exécutée sur un runner Ubuntu.
+
+```yaml
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+```
+
+1. **Clonage du dépôt** :  
+   La première étape consiste à cloner le dépôt GitHub dans le runner.
+
+```yaml
+steps:
+  - name: Checkout repository 
+    uses: actions/checkout@v2
+```
+
+2. **Configuration de Docker Buildx** :  
+   Ensuite, Docker Buildx est configuré pour permettre la construction d'images Docker multiplateformes.
+
+```yaml
+  - name: Set up Docker Buildx
+    uses: docker/setup-buildx-action@v1
+```
+
+3. **Connexion à Docker Hub** :  
+Le workflow se connecte à Docker Hub en utilisant les identifiants Docker Hub stockés dans les secrets GitHub.
+
+```yaml
+    - name: Login to Docker Hub
+    uses: docker/login-action@v1
+    with:
+      username: ${{ secrets.DOCKERHUB_USERNAME }} 
+      password: ${{ secrets.DOCKERHUB_PASSWORD }}
+```
+
+4. **Construction et publication de l'image Docker** :  
+L'image Docker est construite à partir du Dockerfile dans le répertoire actuel et est ensuite poussée vers Docker Hub.
+
+```yaml
+     - name: Build and push Docker image
+    id: docker_build
+    uses: docker/build-push-action@v2
+    with:
+      context: .
+      file: ./Dockerfile
+      push: true
+      tags: mansat269/weatherapp:latest
+    env:
+      OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+```
+
+4. **Exécution de Hadolint** :  
+Enfin, Hadolint est exécuté pour vérifier le Dockerfile avant la construction de l'image Docker.
+
+```yaml
+      - name: Run Hadolint
+    uses: hadolint/hadolint-action@v1.6.0
+    with:
+      dockerfile: Dockerfile
+```
