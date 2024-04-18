@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import os
 from prometheus_flask_exporter import PrometheusMetrics
-from prometheus_client import Counter, generatelatest, CONTENT_TYPE_LATEST
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
 
 app = Flask(__name__)
