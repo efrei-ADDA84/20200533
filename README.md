@@ -220,3 +220,34 @@ Exemple d'utilisation avec cURL :
 
 ```bash
 curl "http://devops-20200533.francesouth.azurecontainer.io/?lat=5.902785&lon=102.754175"
+```
+
+## Étapes réalisées
+
+### Surveillance des Métriques avec Prometheus
+
+Pour améliorer la surveillance de notre application, nous avons intégré la collecte de métriques à l'aide de Prometheus. Voici ce que fait ce rajout :
+
+- **Importation des modules nécessaires :** Nous importons les modules `PrometheusMetrics`, `Counter`, `generate_latest`, et `CONTENT_TYPE_LATEST` depuis les bibliothèques Prometheus et Flask.
+
+```python
+from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
+```
+
+- **Initialisation de PrometheusMetrics :** Nous utilisons `PrometheusMetrics` pour créer une instance qui va automatiquement exposer nos métriques à l'URL `/metrics`.
+
+```python
+app = Flask(__name__)
+metrics = PrometheusMetrics(app)
+```
+
+- **Définition de la route des métriques :** Nous définissons une route `/metrics` à laquelle Prometheus peut accéder pour collecter les métriques. Lorsque cette route est appelée, nous générons les dernières métriques au format Prometheus et les retournons avec le type de contenu approprié grâce au code suivant.
+
+```python
+@app.route('/metrics')
+def metrics():
+    return generate_latest(), 200, {'contentType': CONTENT_TYPE_LATEST}
+```
+
+Cette intégration nous permet de surveiller plus efficacement les performances de notre application et de collecter des métriques importantes pour l'analyse et le diagnostic.
