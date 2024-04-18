@@ -1,24 +1,22 @@
 name: Build and Push Docker Image
 
-# Définition des conditions de déclenchement du workflow: push sur la branche 'main'
+
 on:
   push:
     branches:
       - main
     
 
-# Définition des tâches à exécuter
 jobs:
 
-  # Lancement du jib sur le runner Ubuntu le plus récent
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository 
-        uses: actions/checkout@v2 # Clone du repo dans le runner
+        uses: actions/checkout@v2 
       
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1 # Configuration de l'outil de construction d'image Docker
+        uses: docker/setup-buildx-action@v1 
       
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -38,7 +36,44 @@ jobs:
         env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
 
+      - name: Log in to Azure Container Registry 
+        uses: docker/login-action@v1
+        with: 
+          registry: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image to ACR 
+        uses: docker/build-push-action@v2
+        with: 
+          context: . 
+          file: ./Dockerfile 
+          push: true 
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/20200533
+
+        env: 
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+
+      - name: 'Login via Azure CLI' 
+        uses: azure/login@v1
+        with: 
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Deploy to Azure Container Instance' 
+        uses: azure/aci-deploy@v1
+        with: 
+          resource-group: ADDA84-CTP 
+          dns-name-label: devops-20200533
+          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/20200533 
+          name: 20200533 
+          location: 'francecentral' 
+          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          registry-username: ${{ secrets.REGISTRY_USERNAME }} 
+          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          secure-environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }} 
+          
       - name: Run Hadolint
         uses: hadolint/hadolint-action@v1.6.0
         with:
           dockerfile: dockerfile
+
