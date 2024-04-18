@@ -37,5 +37,9 @@ def get_weather():
             "temperature": data['main']['temp']
         })
 
+@app.route('/metrics')
+def metrics():
+    return generate_latest(), 200, {'contentType': CONTENT_TYPE_LATEST}
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)  
