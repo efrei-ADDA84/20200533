@@ -2,9 +2,14 @@ from flask import Flask, request, jsonify
 import requests
 import os
 from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter, generatelatest, CONTENT_TYPE_LATEST
+
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
+
+# Création d'un compteur pour le nombre de requêtes traitées
+request_counter = Counter('requests_total', 'Total number of requests received')
 
 @app.route('/')
 def get_weather():
