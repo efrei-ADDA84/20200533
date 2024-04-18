@@ -1,4 +1,4 @@
-# Wrapper météo avec Docker
+# TP1 - Wrapper météo avec Docker
 
 Ce dépôt contient un wrapper météo qui utilise l'API OpenWeatherMap pour récupérer les données météorologiques d'un lieu donné à partir de sa latitude et de sa longitude. Le code est packagé dans une image Docker pour faciliter le déploiement et l'exécution.
 
@@ -66,7 +66,7 @@ Enfin, j'ai utilisé la commande suivante pour posser l'image sur DockerHub et l
 docker push mansat269/weatherapp
 ```
 
-# Weather API
+# TP2 - Weather API
 
 Ce TP vise à créer une API météo qui récupère les données météorologiques d'un lieu donné à partir de la latitude et de la longitude fournies.
 
@@ -193,3 +193,30 @@ Enfin, Hadolint est exécuté pour vérifier le Dockerfile avant la construction
     with:
       dockerfile: Dockerfile
 ```
+
+
+
+# TP3 - Cloud - ACI
+
+Ce TP vise à créer une API météo qui récupère les données météorologiques d'un lieu donné à partir de la latitude et de la longitude fournies, avec déploiement sur Azure Container Instance (ACI) utilisant GitHub Actions pour l'automatisation du processus.
+
+## Objectifs
+
+- Mettre à disposition son code dans un repository Github
+- Mettre à disposition son image (format API) sur Azure Container Registry (ACR) using Github Actions
+- Deployer sur Azure Container Instance (ACI) using Github Actions
+
+## Utilisation
+
+Pour utiliser cette API météo, suivez les étapes suivantes :
+
+Accédez à l'URL suivante dans votre navigateur web ou via une requête HTTP :
+
+[http://devops-20200533.francesouth.azurecontainer.io/?lat=5.902785&lon=102.754175](http://devops-20200533.francesouth.azurecontainer.io/?lat=5.902785&lon=102.754175)
+
+Assurez-vous de remplacer les valeurs `lat` et `lon` par les coordonnées de latitude et de longitude du lieu dont vous souhaitez obtenir les données météorologiques.
+
+Exemple d'utilisation avec cURL :
+
+```bash
+curl "http://devops-20200533.francesouth.azurecontainer.io/?lat=5.902785&lon=102.754175"
