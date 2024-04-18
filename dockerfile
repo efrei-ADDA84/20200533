@@ -12,4 +12,3 @@ COPY . .
 ENV OPENWEATHER_API_KEY=""
 ENV FLASK_APP=weather.py
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
