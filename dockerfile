@@ -12,3 +12,4 @@ COPY . .
 ENV OPENWEATHER_API_KEY=""
 ENV FLASK_APP=weather.py
 
+CMD ["python", "weather.py"]
