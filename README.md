@@ -360,23 +360,25 @@ Voici les différentes étapes que j'ai suivies pour mener à bien ce projet :
    terraform apply
    ```
 
-6. **Récupération de l'adresse IP publique de la VM :** J'ai copié l'adresse IP publique de la machine virtuelle déployée depuis le portail Azure afin de pouvoir l'utiliser dans les commandes qui vont suivre.
+## Connexion a la VM en SSH
 
-7. **Génération de la clé privée SSH :** J'ai généré une paire de clés SSH localement à l'aide de la commande `ssh-keygen`.
+1. **Récupération de l'adresse IP publique de la VM :** J'ai copié l'adresse IP publique de la machine virtuelle déployée depuis le portail Azure afin de pouvoir l'utiliser dans les commandes qui vont suivre.
+
+2. **Génération de la clé privée SSH :** J'ai généré une paire de clés SSH localement à l'aide de la commande `ssh-keygen`.
 
    ```bash
    ssh-keygen -t rsa -b 4096 -C "thierno-sadou.diallo@efrei.net"
    ```
 
-8. **Récupération de la clé privée Terraform :** J'ai récupéré la clé privée générée par Terraform en utilisant la commande `terraform output private_key_pem`, que j'ai ensuite enregistrée dans un fichier `id_rsa.pem`.
+3. **Récupération de la clé privée Terraform :** J'ai récupéré la clé privée générée par Terraform en utilisant la commande `terraform output private_key_pem`, que j'ai ensuite enregistrée dans un fichier `id_rsa.pem`.
 
-9. **Connexion SSH à la machine virtuelle :** En utilisant la clé privée générée, j'ai établi une connexion SSH à la machine virtuelle avec la commande `ssh`.
+4. **Connexion SSH à la machine virtuelle :** En utilisant la clé privée générée, j'ai établi une connexion SSH à la machine virtuelle avec la commande `ssh`.
 
    ```bash
    ssh -i id_rsa.pem devops@52.143.179.175
    ```
 
-10. **Vérification du système d'exploitation de la VM :** Pour confirmer que la machine virtuelle correspondait à mes spécifications, j'ai récupéré des informations sur le système d'exploitation avec la commande `cat /etc/os-release`.
+5. **Vérification du système d'exploitation de la VM :** Pour confirmer que la machine virtuelle correspondait à mes spécifications, j'ai récupéré des informations sur le système d'exploitation avec la commande `cat /etc/os-release`.
 
 nous obtenons la sortie siuvante qui nous confirme que les contraintes ont été respectées:
 
@@ -395,10 +397,8 @@ nous obtenons la sortie siuvante qui nous confirme que les contraintes ont été
    UBUNTU_CODENAME=jammy
    ```
 
-11. **Destruction des ressources Terraform :** Une fois que j'ai terminé d'utiliser la machine virtuelle, j'ai supprimé les ressources Terraform pour éviter les coûts inutiles en exécutant la commande `terraform destroy`.
+6. **Destruction des ressources Terraform :** Une fois que j'ai terminé d'utiliser la machine virtuelle, j'ai supprimé les ressources Terraform pour éviter les coûts inutiles en exécutant la commande `terraform destroy`.
 
     ```bash
     terraform destroy
     ```
-
-En suivant ces étapes, j'ai réussi à déployer, à me connecter et à vérifier ma machine virtuelle Azure sans difficulté.
