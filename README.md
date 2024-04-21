@@ -362,6 +362,8 @@ Voici les différentes étapes que j'ai suivies pour mener à bien ce projet :
 
 ## Connexion a la VM en SSH
 
+La seconde partie de ce TP consistait a se connecter a distance a la VM fraichement déployée grâce au protocole SSH
+
 1. **Récupération de l'adresse IP publique de la VM :** J'ai copié l'adresse IP publique de la machine virtuelle déployée depuis le portail Azure afin de pouvoir l'utiliser dans les commandes qui vont suivre.
 
 2. **Génération de la clé privée SSH :** J'ai généré une paire de clés SSH localement à l'aide de la commande `ssh-keygen`.
