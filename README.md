@@ -251,3 +251,23 @@ def metrics():
 ```
 
 Cette intégration nous permet de surveiller plus efficacement les performances de notre application et de collecter des métriques importantes pour l'analyse et le diagnostic.
+
+
+### Mise a jour du Github Workflow
+
+Enfin, afin de déployer ce code sur ACI après 'avoir build et push sur ACR le github workflow a été mis à jour pour se connecter à azure en utilisant les organisation secrets et configurer les paramètres de notre ressource:
+
+```yaml
+- name: 'Deploy to Azure Container Instance' 
+        uses: azure/aci-deploy@v1
+        with: 
+          resource-group: ADDA84-CTP 
+          dns-name-label: devops-20200533
+          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/20200533 
+          name: 20200533 
+          location: 'france south' 
+          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          registry-username: ${{ secrets.REGISTRY_USERNAME }} 
+          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          secure-environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }} 
+```
