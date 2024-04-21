@@ -271,3 +271,134 @@ Enfin, afin de déployer ce code sur ACI après 'avoir build et push sur ACR le 
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           secure-environment-variables: OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }} 
 ```
+# TP4 - Cloud - Terraform
+## Objectifs
+
+Ce document décrit le processus pour déployer une machine virtuelle Azure (VM) avec une adresse IP publique dans un réseau existant (network-tp4) en utilisant Terraform. Les objectifs spécifiques sont les suivants :
+
+1. **Créer une machine virtuelle Azure (VM) :** Déployer une VM dans Azure avec une adresse IP publique, en utilisant Terraform pour automatiser le processus.
+
+2. **Utiliser Terraform :** Utiliser Terraform pour décrire et provisionner l'infrastructure Azure requise pour la VM.
+
+3. **Se connecter à la VM avec SSH :** Configurer la VM pour permettre la connexion SSH et se connecter à celle-ci après son déploiement.
+
+4. **Comprendre les différents services Azure (ACI vs. AVM) :** Explorer les différences entre les services Azure Container Instances (ACI) et Azure Virtual Machines (AVM) dans le contexte de ce déploiement.
+
+5. **Mettre à disposition son code dans un repository GitHub :** Héberger le code Terraform dans un repository GitHub pour faciliter la collaboration et le suivi des modifications.
+
+## Contraintes
+
+L'ensemble du déploiement doit respecter les contraintes suivantes :
+
+- **Location :** France Central
+- **Azure Subscription ID :** 765266c6-9a23-4638-af32-dd1e32613047
+- **Azure Resource Group :** ADDA84-CTP
+- **Network :** network-tp4
+- **Subnet :** internal
+- **Azure VM Name :** devops-<identifiant-efrei>
+- **VM Size :** Standard_D2s_v3
+- **Authentification :** Utiliser Azure CLI pour l'authentification
+- **Utilisateur Administrateur de la VM :** devops
+- **Création d'une clé SSH avec Terraform**
+- **Système d'exploitation :** Ubuntu 22.04
+
+## Fichiers Terraform
+
+Ce projet contient plusieurs fichiers Terraform, chacun ayant un rôle spécifique dans le déploiement de l'infrastructure Azure nécessaire à la machine virtuelle. Voici une brève description de chaque fichier :
+
+- **`main.tf` :** Ce fichier contient la configuration principale pour créer une interface réseau Azure, une adresse IP publique, et une machine virtuelle Azure. Il définit également la configuration de l'interface réseau et l'allocation de l'adresse IP publique.
+
+- **`data.tf` :** Ce fichier utilise les données existantes d'Azure pour récupérer des informations sur le réseau virtuel et le sous-réseau spécifiés dans les variables.
+
+- **`network.tf` :** Ce fichier définit la ressource pour l'interface réseau Azure, y compris la configuration de l'adresse IP privée et l'association avec le sous-réseau.
+
+- **`ssh.tf` :** Ce fichier crée une clé SSH utilisée pour se connecter à la machine virtuelle Azure. Il génère une paire de clés privée/publique utilisée pour l'authentification SSH.
+
+- **`variables.tf` :** Ce fichier contient les déclarations de toutes les variables utilisées dans le projet Terraform, telles que l'ID d'abonnement Azure, le nom du groupe de ressources, le nom du réseau virtuel, le nom du sous-réseau, etc.
+
+- **`virtual_machine.tf` :** Ce fichier contient la configuration pour créer la machine virtuelle Azure. Il définit le type de machine virtuelle, le système d'exploitation, la taille du disque, le script personnalisé à exécuter au démarrage, et les clés SSH pour l'authentification.
+
+Chaque fichier contribue à la configuration globale de l'infrastructure Azure nécessaire à la création de la machine virtuelle dans Azure.
+
+## Étapes Réalisées
+
+Voici les différentes étapes que j'ai suivies pour mener à bien ce projet :
+
+1. **Installation de Terraform et Azure CLI avec Brew :** J'ai installé Terraform et Azure CLI sur ma machine en utilisant Homebrew pour simplifier la gestion des dépendances.
+
+   ```bash
+   brew install terraform azure-cli
+   ```
+
+2. **Connexion à Azure avec az login :** Pour permettre à Terraform d'interagir avec Azure, j'ai utilisé la commande `az login` pour me connecter à mon compte Azure.
+
+   ```bash
+   az login
+   ```
+
+3. **Initialisation de Terraform :** J'ai initialisé mon projet Terraform dans le répertoire de travail en exécutant la commande `terraform init`, ce qui a permis de télécharger les plugins nécessaires et d'initialiser l'état du projet.
+
+   ```bash
+   terraform init
+   ```
+4. **Formatage du code Terraform :** J'ai utilisé la commande terraform fmt pour formater mon code Terraform selon les conventions de style recommandées.
+
+   ```bash
+   terraform fmt
+   ```
+
+
+5. **Planification des ressources Terraform :** Après avoir initialisé et formaté mon projet, j'ai planifié les ressources à déployer avec la commande `terraform plan`.
+
+   ```bash
+   terraform plan
+   ```
+
+6. **Déploiement des ressources Terraform :** Une fois satisfait du plan de déploiement, j'ai procédé au déploiement des ressources dans Azure en exécutant la commande `terraform apply`.
+
+   ```bash
+   terraform apply
+   ```
+
+6. **Récupération de l'adresse IP publique de la VM :** J'ai copié l'adresse IP publique de la machine virtuelle déployée depuis le portail Azure afin de pouvoir l'utiliser dans les commandes qui vont suivre.
+
+7. **Génération de la clé privée SSH :** J'ai généré une paire de clés SSH localement à l'aide de la commande `ssh-keygen`.
+
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "thierno-sadou.diallo@efrei.net"
+   ```
+
+8. **Récupération de la clé privée Terraform :** J'ai récupéré la clé privée générée par Terraform en utilisant la commande `terraform output private_key_pem`, que j'ai ensuite enregistrée dans un fichier `id_rsa.pem`.
+
+9. **Connexion SSH à la machine virtuelle :** En utilisant la clé privée générée, j'ai établi une connexion SSH à la machine virtuelle avec la commande `ssh`.
+
+   ```bash
+   ssh -i id_rsa.pem devops@52.143.179.175
+   ```
+
+10. **Vérification du système d'exploitation de la VM :** Pour confirmer que la machine virtuelle correspondait à mes spécifications, j'ai récupéré des informations sur le système d'exploitation avec la commande `cat /etc/os-release`.
+
+nous obtenons la sortie siuvante qui nous confirme que les contraintes ont été respectées:
+
+```
+   PRETTY_NAME="Ubuntu 22.04.4 LTS"
+   NAME="Ubuntu"
+   VERSION_ID="22.04"
+   VERSION="22.04.4 LTS (Jammy Jellyfish)"
+   VERSION_CODENAME=jammy
+   ID=ubuntu
+   ID_LIKE=debian
+   HOME_URL="https://www.ubuntu.com/"
+   SUPPORT_URL="https://help.ubuntu.com/"
+   BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+   PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+   UBUNTU_CODENAME=jammy
+   ```
+
+11. **Destruction des ressources Terraform :** Une fois que j'ai terminé d'utiliser la machine virtuelle, j'ai supprimé les ressources Terraform pour éviter les coûts inutiles en exécutant la commande `terraform destroy`.
+
+    ```bash
+    terraform destroy
+    ```
+
+En suivant ces étapes, j'ai réussi à déployer, à me connecter et à vérifier ma machine virtuelle Azure sans difficulté.
